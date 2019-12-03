@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: appcat
+spec:
+  selector:
+     run: appcat
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 10000
+  type: LoadBalancer

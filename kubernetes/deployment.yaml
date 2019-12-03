@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: appcat
+  name: appcat
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      run: appcat
+  template:
+    metadata:
+      labels:
+        run: appcat
+    spec:
+      containers:
+      - image: gcr.io/rugged-shell-260219/react-app:latest
+        name: appcat
+        ports:
+        - containerPort: 80
