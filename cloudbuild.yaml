@@ -1,28 +1,47 @@
 steps:
-#step 1
+#step 1 : pull existing image if exists
 - name: 'gcr.io/cloud-builders/docker' 
   entrypoint: 'bash'
   args: [
    '-c', 
    'docker pull gcr.io/$PROJECT_ID/appcat:latest || exit 0'
   ]
-#step 2
+#same for getter container
+- name: 'gcr.io/cloud-builders/docker' 
+  entrypoint: 'bash'
+  args: [
+   '-c', 
+   'docker pull gcr.io/$PROJECT_ID/appcatgetter:latest || exit 0'
+  ]
+#step 2 : build from Dockerfile
 - name: gcr.io/cloud-builders/docker
   args: [
-   'build', 
+   'build',
+   '--file=Dockerfile-appcat',
    '-t', 
    'gcr.io/$PROJECT_ID/appcat:$BRANCH_NAME-$COMMIT_SHA',
    '-t', 
    'gcr.io/$PROJECT_ID/appcat:latest',
    '.'
   ]
-#step 3
+#same for getter container
+- name: gcr.io/cloud-builders/docker
+  args: [
+   'build', 
+   '--file=Dockerfile-appcatgetter', 
+   '-t', 
+   'gcr.io/$PROJECT_ID/appcatgetter:$BRANCH_NAME-$COMMIT_SHA',
+   '-t', 
+   'gcr.io/$PROJECT_ID/appcatgetter:latest',
+   '.'
+  ]
+#step 3 : apply service.yaml and deployment.yaml in kubernetes folder
 - name: 'gcr.io/cloud-builders/kubectl'
   args: ['apply', '-f', 'kubernetes/']
   env:
   - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
   - 'CLOUDSDK_CONTAINER_CLUSTER=cats'
-#step 4
+#step 4 : set the image of the deployment to the new image
 - name: 'gcr.io/cloud-builders/kubectl'
   args: [
    'set', 
@@ -34,8 +53,26 @@ steps:
   env:
   - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
   - 'CLOUDSDK_CONTAINER_CLUSTER=cats'
-# push images to Google Container Registry with tags
+#same for getter container
+- name: 'gcr.io/cloud-builders/kubectl'
+  args: [
+   'set', 
+   'image', 
+   'deployment', 
+   'appcatgetter', 
+   'appcatgetter=gcr.io/$PROJECT_ID/appcatgetter:$BRANCH_NAME-$COMMIT_SHA'
+  ]
+  env:
+  - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+  - 'CLOUDSDK_CONTAINER_CLUSTER=cats'
+#step 5 : push images to Google Container Registry with tags
 images: [
    'gcr.io/$PROJECT_ID/appcat:$BRANCH_NAME-$COMMIT_SHA',
    'gcr.io/$PROJECT_ID/appcat:latest'
   ]
+#same for getter container
+images: [
+   'gcr.io/$PROJECT_ID/appcatgetter:$BRANCH_NAME-$COMMIT_SHA',
+   'gcr.io/$PROJECT_ID/appcatgetter:latest'
+  ]
+  

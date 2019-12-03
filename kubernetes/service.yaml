@@ -10,3 +10,18 @@ spec:
     port: 80
     targetPort: 10000
   type: LoadBalancer
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: appcatgetter
+spec:
+  selector:
+     run: appcatgetter
+  ports:
+  - protocol: TCP
+    port: 2020
+    targetPort: 10001
+  type: LoadBalancer
