@@ -15,7 +15,7 @@ spec:
         run: appcat
     spec:
       containers:
-      - image: gcr.io/rugged-shell-260219/react-app:latest
+      - image: gcr.io/appcat/appcat:latest
         name: appcat
         ports:
         - containerPort: 80
