@@ -7,6 +7,6 @@ spec:
      run: appcat
   ports:
   - protocol: TCP
-    port: 80
-    targetPort: 10000
+    port: 786
+    targetPort: 80
   type: LoadBalancer
