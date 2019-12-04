@@ -35,6 +35,10 @@ spec:
               secretKeyRef:
                 name: db
                 key: password
+          - name: SPRING_PROFILES
+            value: "kubernetes"
+          - name: SPRING_PROFILES_ACTIVE
+            value: "kubernetes"
 
 ---
 

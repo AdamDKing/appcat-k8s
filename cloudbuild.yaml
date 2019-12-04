@@ -18,6 +18,8 @@ steps:
   args: [
    'build',
    '--file=Dockerfile-appcat',
+   '--build-arg',
+   'SPRING_PROFILES=local',
    '-t', 
    'gcr.io/$PROJECT_ID/appcat:$BRANCH_NAME-$COMMIT_SHA',
    '-t', 
