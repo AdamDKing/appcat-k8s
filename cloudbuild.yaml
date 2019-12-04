@@ -68,10 +68,7 @@ steps:
 #step 5 : push images to Google Container Registry with tags
 images: [
    'gcr.io/$PROJECT_ID/appcat:$BRANCH_NAME-$COMMIT_SHA',
-   'gcr.io/$PROJECT_ID/appcat:latest'
-  ]
-#same for getter container
-images: [
+   'gcr.io/$PROJECT_ID/appcat:latest',
    'gcr.io/$PROJECT_ID/appcatgetter:$BRANCH_NAME-$COMMIT_SHA',
    'gcr.io/$PROJECT_ID/appcatgetter:latest'
   ]
