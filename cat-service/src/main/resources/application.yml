@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: local
   application:
     name: appcat
 server:
@@ -6,13 +8,19 @@ server:
 
 ---
 spring:
-  profiles:
-    active: local
+  profiles: local
+  datasource:
+    platform: h2
+    url: jdbc:h2:mem:caliber;Mode=PostgreSQL
+    username: sa
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
 
 ---
 spring:
-  profiles:
-    active: kubernetes
+  profiles: kubernetes
   datasource:
     url: jdbc:postgresql://${SECRET_DB_HOST:defhost}:5432/postgres
     username: ${SECRET_DB_USERNAME:defun}
